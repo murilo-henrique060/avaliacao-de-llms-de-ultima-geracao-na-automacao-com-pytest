@@ -8,4 +8,5 @@ Este repositório tem como organização:
 * `/cases` - código com erros mapeados para verificação dos códigos gerados pelas LLMs;
 * `/results` - código gerado pelas LLMs em cada teste e resultados de sua execução com Pytest em cada geração;
 * `geracao-casos-de-teste-com-llm.csv` - arquivo com métricas híbridas mapeadas para cada caso;
-* `gerador-graficos.ipynb` - código para geração das visualizações de dados utilizadas nos artigos. 
+* `gerador-graficos.ipynb` - código para geração das visualizações de dados utilizadas nos artigos.
+* `test-runner.py` - código para geração dos casos de teste com LLMs.
