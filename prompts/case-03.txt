@@ -1,0 +1,105 @@
+You are a senior test engineer specialized in critical and highly regulated systems.
+
+Your task is to generate automated test cases in Python using exclusively the pytest library,
+based on the formal specifications provided below.
+
+⚠️ GENERAL CONSTRAINTS (MANDATORY)
+
+1. Do not create rules, requirements, states, exceptions, or behaviors that are not explicitly described.
+2. Do not assume tolerances, rounding, implicit exceptions, or “domain-standard” behaviors.
+3. Do not simplify rules or consolidate validations.
+4. Clearly distinguish between:
+   - validation failure (exception)
+   - valid state transition (allowed outcome)
+5. Each test must validate exactly one specific behavior.
+6. Use precise (exact) values only; never use ranges or generic intervals.
+7. All tests must be deterministic and reproducible.
+8. Use only pytest, with no additional external libraries.
+9. Do not implement the system — tests only.
+10. Do not include explanatory text outside code comments.
+
+---
+
+## SYSTEM CONTEXT
+
+Subscription management system responsible for recording payments, tracking consecutive failures,
+updating the subscription state, and preventing invalid state transitions, according to strictly
+defined business rules.
+
+---
+
+## BUSINESS RULES (BR)
+
+- BR01: A subscription may be in only one of the following states: ACTIVE, SUSPENDED, or CANCELED;
+- BR02: Subscriptions with status CANCELED must not be reactivated under any circumstances;
+- BR03: The subscription must be automatically suspended after exactly 3 consecutive payment failures;
+- BR04: A successful payment must reset the consecutive payment failure counter to zero;
+- BR05: Billing must not be retroactive.
+
+---
+
+## FUNCTIONAL REQUIREMENTS (FR)
+
+- FR01: The system must record payments;
+- FR02: The system must update the subscription status based on payment success or failure;
+- FR03: The system must control the number of consecutive payment failures;
+- FR04: The system must prevent invalid state transitions;
+- FR05: The system must raise an exception in case of a failure.
+
+---
+
+## CLASS DIAGRAM (SIMPLIFIED UML)
+
+[Class] Payment
++ success: bool
+
+[Class] Subscription
++ status: "ACTIVE" | "SUSPENDED" | "CANCELED"
++ payment_failures: int
++ record_payment(payment: Payment): Decimal
+
+---
+
+## TASK
+
+Based EXCLUSIVELY on the information above:
+
+1. Generate automated tests in Python using pytest.
+2. For each Business Rule (BR), create at least one test that:
+   - validates correct behavior
+   - exposes violations when applicable
+3. For each Functional Requirement (FR), create at least one test that:
+   - validates its fulfillment
+4. Create both positive and negative tests.
+5. Create edge case tests whenever explicitly required by the rules.
+6. Tests involving exceptions must use pytest.raises.
+7. Each test must have a clear and self-explanatory name.
+8. Do not reuse tests to cover multiple business rules.
+9. Do not use generic parameterization that hides specific scenarios.
+
+---
+
+## OUTPUT FORMAT (MANDATORY)
+
+- Return exclusively valid Python code.
+- Use the standard pytest structure.
+- Each test must include comments explicitly indicating:
+  - which BR and/or FR is being validated.
+
+Mandatory comment example:
+# BR03 – Suspension after 3 consecutive payment failures
+
+---
+
+## EVALUATION CRITERIA (IMPLICIT)
+
+Your response will be evaluated based on:
+- Literal adherence to the rules
+- Coverage of BR and FR
+- Semantic correctness of the tests
+- Absence of invented behavior
+- Clarity and precision of the generated tests
+
+⚠️ Any test that assumes unspecified behavior will be considered incorrect.
+
+Generate tests only.

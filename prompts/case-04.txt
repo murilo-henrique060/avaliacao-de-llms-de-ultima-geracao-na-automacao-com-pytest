@@ -1,0 +1,116 @@
+You are a senior test engineer specialized in critical and highly regulated systems.
+
+Your task is to generate automated test cases in Python using exclusively the pytest library,
+based on the formal specifications provided below.
+
+⚠️ GENERAL CONSTRAINTS (MANDATORY)
+
+1. Do not create rules, requirements, states, exceptions, or behaviors that are not explicitly described.
+2. Do not assume tolerances, rounding, implicit exceptions, or “domain-standard” behaviors.
+3. Do not simplify rules or consolidate validations.
+4. Clearly distinguish between:
+   - validation failure (exception)
+   - valid business decision (allowed outcome)
+5. Each test must validate exactly one specific behavior.
+6. Use precise (exact) values only; never use ranges or generic intervals.
+7. All tests must be deterministic and reproducible.
+8. Use only pytest, with no additional external libraries.
+9. Do not implement the system — tests only.
+10. Do not include explanatory text outside code comments.
+
+---
+
+## SYSTEM CONTEXT
+
+Personal credit approval system responsible for evaluating credit applications based
+exclusively on the provided score, income, and age values, applying strict validations,
+with no inference, normalization, or exposure of intermediate states.
+
+---
+
+## BUSINESS RULES (BR)
+
+- BR01: Credit may only be approved if, simultaneously:
+    * Score ≥ 700
+    * Income ≥ R$ 5,000
+    * Age ≥ 21
+- BR02: If any of the criteria fail, the credit must be denied;
+- BR03: Values as NaN or Infinity are not allowed and must result in an exception;
+- BR04: Criteria must be validated according to the following types and constraints:
+    * Score: positive integer value
+    * Income: positive decimal value
+    * Age: positive integer value
+- BR05: Values must not be normalized or implicitly adjusted (e.g., 4999.9999 ≠ 5000);
+- BR06: Any validation failure must result in an exception;
+- BR07: The system must not infer, guess, or assume values that were not provided;
+- BR08: There are no intermediate approval levels;
+- BR09: Credit analysis is an indivisible operation:
+    * It must not be split into observable steps
+    * It must not return partial results
+    * It must not expose logs or decision criteria to the API consumer
+
+---
+
+## FUNCTIONAL REQUIREMENTS (FR)
+
+- FR01: Evaluate the credit application using exclusively the provided score, income, and age values, with no inference, normalization, or data enrichment;
+- FR02: Mandatory validation of all criteria defined in the business rules before returning any result;
+- FR03: Return exclusively one of the following results when all validations are successful: "APPROVED" or "DENIED";
+- FR04: Record exactly one analysis result only when a valid decision ("APPROVED" or "DENIED") is produced;
+- FR05: Raise an exception whenever any validation failure occurs, including invalid type, missing value, magic value (NaN or Infinity), or business rule violation;
+- FR06: Do not return any business result when an exception is raised;
+- FR07: Do not expose intermediate states, partial results, or progress messages during or after the analysis;
+- FR08: Do not perform any kind of normalization, rounding, or automatic adjustment on input values.
+
+---
+
+## CLASS DIAGRAM (SIMPLIFIED UML)
+
+[Class] CreditService
++ evaluate(score: int, income: decimal, age: int): "APPROVED" | "DENIED"
+
+---
+
+## TASK
+
+Based EXCLUSIVELY on the information above:
+
+1. Generate automated tests in Python using pytest.
+2. For each Business Rule (BR), create at least one test that:
+   - validates correct behavior
+   - exposes violations when applicable
+3. For each Functional Requirement (FR), create at least one test that:
+   - validates its fulfillment
+4. Create both positive and negative tests.
+5. Create edge case tests whenever explicitly required by the rules.
+6. Tests involving exceptions must use pytest.raises.
+7. Each test must have a clear and self-explanatory name.
+8. Do not reuse tests to cover multiple business rules.
+9. Do not use generic parameterization that hides specific scenarios.
+
+---
+
+## OUTPUT FORMAT (MANDATORY)
+
+- Return exclusively valid Python code.
+- Use the standard pytest structure.
+- Each test must include comments explicitly indicating:
+  - which BR and/or FR is being validated.
+
+Mandatory comment example:
+# BR05 – Values must not be normalized
+
+---
+
+## EVALUATION CRITERIA (IMPLICIT)
+
+Your response will be evaluated based on:
+- Literal adherence to the rules
+- Complete coverage of BR and FR
+- Semantic correctness of the tests
+- Absence of invented behavior
+- Clarity and precision of the generated tests
+
+⚠️ Any test that assumes unspecified behavior will be considered incorrect.
+
+Generate tests only.
